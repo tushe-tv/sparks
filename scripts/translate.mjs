@@ -11,11 +11,11 @@ const model = genAI.getGenerativeModel({
 });
 
 const TARGET_LOCALES = [
-  // 'ar',
+  'ar',
   'de',
-  // 'es',
-  // 'fr',
-  // 'he',
+  'es',
+  'fr',
+  'he',
   // 'it',
   // 'ja',
   // 'pl',
@@ -26,7 +26,7 @@ const TARGET_LOCALES = [
 const BLOG_DIR = path.join(process.cwd(), 'blog', 'posts');
 const EN_DIR = path.join(BLOG_DIR, 'en');
 
-// We keep a tiny 500ms micro-pause just so your computer's hard drive
+// We keep a micro-pause just so your computer's hard drive
 // doesn't trip over itself while writing the files!
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -112,9 +112,11 @@ async function translateBlogPosts() {
         } catch (error) {
           // If a weird network glitch happens, we just log it and move to the next file!
           console.error(
-            `   ❌ Failed to translate ${enArticle.slug}:`,
+            `   ❌ FATAL ERROR: Failed to translate ${enArticle.slug}:`,
             error.message,
           );
+          console.error('   🛑 Halting the entire translation process.');
+          process.exit(1);
         }
       } else {
         console.log(`   ⏭️ Skipped "${enArticle.slug}" (Already translated)`);
