@@ -165,6 +165,17 @@
     "datePublished": "2025-11-24"
   },
   {
+    "slug": "essential-travel-tips-stay-connect-abroad-with-sparks-esim",
+    "title": "Wichtige Reisetipps: Bleiben Sie im Ausland mit Sparks eSIM verbunden",
+    "description": "Eine internationale Reise zu planen kann aufregend sein, aber im Ausland verbunden zu bleiben, ist oft eine Herausforderung. Zwischen exorbitanten Roaming-Gebühren und der Mühe, lokale SIM-Karten zu finden, kann Konnektivität schnell zu Kopfzerbrechen führen.",
+    "img": {
+      "src": "essential-travel-tips.webp",
+      "width": 1500,
+      "height": 1000
+    },
+    "datePublished": "2025-11-17"
+  },
+  {
     "slug": "mobile-internet-in-spain-a-comprehensive-guide-for-2025",
     "title": "Mobiles Internet in Spanien: Ein umfassender Leitfaden für 2025",
     "description": "Von den belebten Straßen Barcelonas bis zu den abgelegenen Stränden der Kanarischen Inseln – um in Spanien verbunden zu bleiben, ist es wichtig, die vielfältige digitale Landschaft zu verstehen.",
@@ -328,16 +339,5 @@
       "height": 1000
     },
     "datePublished": "2025-08-11"
-  },
-  {
-    "slug": "essential-travel-tips-stay-connect-abroad-with-sparks-esim",
-    "title": "Wichtige Reisetipps: Bleiben Sie im Ausland mit Sparks eSIM verbunden",
-    "description": "Eine internationale Reise zu planen kann aufregend sein, aber im Ausland verbunden zu bleiben, ist oft eine Herausforderung. Zwischen exorbitanten Roaming-Gebühren und der Mühe, lokale SIM-Karten zu finden, kann Konnektivität schnell zu Kopfzerbrechen führen.",
-    "img": {
-      "src": "essential-travel-tips.webp",
-      "width": 1500,
-      "height": 1000
-    },
-    "datePublished": "2025-11-17"
   }
 ]
