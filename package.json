@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "translate": "node scripts/translate.mjs"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/tushe-tv/sparks#readme",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
-    "dotenv": "^17.4.2"
+    "dotenv": "^17.4.2",
+    "prettier": "^3.8.3"
   }
 }
