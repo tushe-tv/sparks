@@ -18,7 +18,7 @@ const TARGET_LOCALES = [
   // 'he',
   'it',
   // 'ja',
-  // 'pl',
+  'pl',
   // 'pt',
   // 'ru',
   // 'tr',
