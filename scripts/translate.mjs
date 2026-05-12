@@ -19,15 +19,13 @@ const TARGET_LOCALES = [
   'it',
   // 'ja',
   'pl',
-  // 'pt',
+  'pt',
   // 'ru',
   // 'tr',
-]; // Add as many as you want now!
+];
 const BLOG_DIR = path.join(process.cwd(), 'blog', 'posts');
 const EN_DIR = path.join(BLOG_DIR, 'en');
 
-// We keep a micro-pause just so your computer's hard drive
-// doesn't trip over itself while writing the files!
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function translateBlogPosts() {
@@ -80,43 +78,70 @@ async function translateBlogPosts() {
           ${JSON.stringify(enArticleData)}
         `;
 
-        try {
-          // No more retry loops needed! Just blast it straight to the API.
-          const result = await model.generateContent(prompt);
-          const translatedArticleData = JSON.parse(result.response.text());
+        // ✨ NEW: Smart retry logic for temporary server hiccups
+        let success = false;
+        let attempts = 0;
+        const maxAttempts = 3;
 
-          const translatedArticlePath = path.join(
-            localeDir,
-            `${enArticle.slug}.json`,
-          );
-          fs.writeFileSync(
-            translatedArticlePath,
-            JSON.stringify(translatedArticleData, null, 2),
-          );
+        while (!success && attempts < maxAttempts) {
+          try {
+            attempts++;
+            const result = await model.generateContent(prompt);
+            const translatedArticleData = JSON.parse(result.response.text());
 
-          localeCatalog.push({
-            slug: translatedArticleData.slug,
-            title: translatedArticleData.title,
-            description: translatedArticleData.description,
-            img: translatedArticleData.img,
-            datePublished: translatedArticleData.datePublished,
-          });
+            const translatedArticlePath = path.join(
+              localeDir,
+              `${enArticle.slug}.json`,
+            );
+            fs.writeFileSync(
+              translatedArticlePath,
+              JSON.stringify(translatedArticleData, null, 2),
+            );
 
-          fs.writeFileSync(
-            localeCatalogPath,
-            JSON.stringify(localeCatalog, null, 2),
-          );
-          console.log(`   ✅ Success!`);
+            localeCatalog.push({
+              slug: translatedArticleData.slug,
+              title: translatedArticleData.title,
+              description: translatedArticleData.description,
+              img: translatedArticleData.img,
+              datePublished: translatedArticleData.datePublished,
+            });
 
-          await sleep(500); // 0.5 second micro-pause
-        } catch (error) {
-          // If a weird network glitch happens, we just log it and move to the next file!
-          console.error(
-            `   ❌ FATAL ERROR: Failed to translate ${enArticle.slug}:`,
-            error.message,
-          );
-          console.error('   🛑 Halting the entire translation process.');
-          process.exit(1);
+            fs.writeFileSync(
+              localeCatalogPath,
+              JSON.stringify(localeCatalog, null, 2),
+            );
+            console.log(`   ✅ Success!`);
+
+            success = true; // Break the loop
+            await sleep(500);
+          } catch (error) {
+            // Check if it's just a busy server (503) or rate limit (429)
+            if (
+              error.message.includes('503') ||
+              error.message.includes('429')
+            ) {
+              console.warn(
+                `   ⚠️ Server busy (Attempt ${attempts}/${maxAttempts}). Waiting 10 seconds before retrying...`,
+              );
+
+              if (attempts >= maxAttempts) {
+                console.error(
+                  `   ❌ FATAL: Server failed to respond after ${maxAttempts} attempts. Halting.`,
+                );
+                process.exit(1);
+              }
+
+              await sleep(10000); // Wait 10 seconds for Google to recover
+            } else {
+              // If it's a REAL error (like parsing failure), crash immediately
+              console.error(
+                `   ❌ FATAL ERROR: Failed to translate ${enArticle.slug}:`,
+                error.message,
+              );
+              console.error('   🛑 Halting the entire translation process.');
+              process.exit(1);
+            }
+          }
         }
       } else {
         console.log(`   ⏭️ Skipped "${enArticle.slug}" (Already translated)`);
