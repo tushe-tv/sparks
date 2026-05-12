@@ -1,27 +1,43 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 import fs from 'fs';
 import path from 'path';
 import 'dotenv/config';
 
 // Initialize Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// ✨ NEW: We force Gemini to use Structured Outputs (JSON Schema)
+// This strictly controls how the AI replies so it cannot break the formatting!
+const translationSchema = {
+  type: SchemaType.OBJECT,
+  properties: {
+    title: { type: SchemaType.STRING },
+    description: { type: SchemaType.STRING },
+    body: { type: SchemaType.STRING },
+  },
+  required: ['title', 'description', 'body'],
+};
+
 const model = genAI.getGenerativeModel({
   model: 'gemini-2.5-flash',
-  generationConfig: { responseMimeType: 'application/json' },
+  generationConfig: {
+    responseMimeType: 'application/json',
+    responseSchema: translationSchema,
+  },
 });
 
 const TARGET_LOCALES = [
   // 'ar',
-  'de',
-  'es',
-  'fr',
-  // 'he',
-  'it',
+  // 'de',
+  // 'es',
+  // 'fr',
+  'he',
+  // 'it',
   // 'ja',
-  'pl',
-  'pt',
-  'ru',
-  'tr',
+  // 'pl',
+  // 'pt',
+  // 'ru',
+  // 'tr',
 ];
 const BLOG_DIR = path.join(process.cwd(), 'blog', 'posts');
 const EN_DIR = path.join(BLOG_DIR, 'en');
@@ -66,19 +82,25 @@ async function translateBlogPosts() {
         const targetLanguage =
           locale === 'pt' ? 'pt-BR (Brazilian Portuguese)' : locale;
 
+        // ✨ NEW: We only send the specific text fields that need translating
+        // We do NOT send the whole JSON object anymore!
         const prompt = `
-          You are an expert translator. Translate the following blog post JSON into the language code: ${targetLanguage}.
+          You are an expert translator. Translate the following content into: ${targetLanguage}.
           
           CRITICAL RULES:
-          1. Only translate the text inside the 'title', 'description', and 'body' fields.
-          2. The 'body' field contains HTML. You MUST preserve every single HTML tag exactly as it is (e.g., <p>, <h2>). ONLY translate the human-readable text between the tags.
-          3. Do NOT translate the 'slug', 'datePublished', image URLs, or any JSON keys. Leave them exactly as they are.
+          1. The 'body' text contains HTML. You MUST preserve every single HTML tag exactly as it is (e.g., <p>, <h2>). ONLY translate the human-readable text between the tags.
+          2. Ensure the output strictly follows the requested JSON schema.
           
-          JSON to translate:
-          ${JSON.stringify(enArticleData)}
+          TITLE TO TRANSLATE:
+          ${enArticleData.title}
+
+          DESCRIPTION TO TRANSLATE:
+          ${enArticleData.description}
+
+          BODY HTML TO TRANSLATE:
+          ${enArticleData.body}
         `;
 
-        // ✨ NEW: Smart retry logic for temporary server hiccups
         let success = false;
         let attempts = 0;
         const maxAttempts = 3;
@@ -87,7 +109,17 @@ async function translateBlogPosts() {
           try {
             attempts++;
             const result = await model.generateContent(prompt);
-            const translatedArticleData = JSON.parse(result.response.text());
+
+            // This response is now guaranteed to match our schema
+            const translatedFields = JSON.parse(result.response.text());
+
+            // ✨ NEW: We safely rebuild the final JSON object ourselves!
+            const finalArticleData = {
+              ...enArticleData, // Keep all original untranslated fields (slug, date, img)
+              title: translatedFields.title, // Inject the translated title
+              description: translatedFields.description, // Inject the translated description
+              body: translatedFields.body, // Inject the translated body
+            };
 
             const translatedArticlePath = path.join(
               localeDir,
@@ -95,15 +127,15 @@ async function translateBlogPosts() {
             );
             fs.writeFileSync(
               translatedArticlePath,
-              JSON.stringify(translatedArticleData, null, 2),
+              JSON.stringify(finalArticleData, null, 2),
             );
 
             localeCatalog.push({
-              slug: translatedArticleData.slug,
-              title: translatedArticleData.title,
-              description: translatedArticleData.description,
-              img: translatedArticleData.img,
-              datePublished: translatedArticleData.datePublished,
+              slug: finalArticleData.slug,
+              title: finalArticleData.title,
+              description: finalArticleData.description,
+              img: finalArticleData.img,
+              datePublished: finalArticleData.datePublished,
             });
 
             fs.writeFileSync(
@@ -112,33 +144,31 @@ async function translateBlogPosts() {
             );
             console.log(`   ✅ Success!`);
 
-            success = true; // Break the loop
+            success = true;
             await sleep(500);
           } catch (error) {
-            // Check if it's just a busy server (503) or rate limit (429)
             if (
               error.message.includes('503') ||
-              error.message.includes('429')
+              error.message.includes('429') ||
+              error.message.includes('JSON') ||
+              error.name === 'SyntaxError'
             ) {
               console.warn(
-                `   ⚠️ Server busy (Attempt ${attempts}/${maxAttempts}). Waiting 10 seconds before retrying...`,
+                `   ⚠️ AI Error or Server busy (Attempt ${attempts}/${maxAttempts}). Retrying...`,
               );
 
               if (attempts >= maxAttempts) {
                 console.error(
-                  `   ❌ FATAL: Server failed to respond after ${maxAttempts} attempts. Halting.`,
+                  `   ❌ FATAL: Failed after ${maxAttempts} attempts. Halting.`,
                 );
                 process.exit(1);
               }
-
-              await sleep(10000); // Wait 10 seconds for Google to recover
+              await sleep(5000);
             } else {
-              // If it's a REAL error (like parsing failure), crash immediately
               console.error(
                 `   ❌ FATAL ERROR: Failed to translate ${enArticle.slug}:`,
                 error.message,
               );
-              console.error('   🛑 Halting the entire translation process.');
               process.exit(1);
             }
           }
