@@ -20,7 +20,7 @@ const TARGET_LOCALES = [
   // 'ja',
   'pl',
   'pt',
-  // 'ru',
+  'ru',
   // 'tr',
 ];
 const BLOG_DIR = path.join(process.cwd(), 'blog', 'posts');
