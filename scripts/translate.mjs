@@ -11,12 +11,12 @@ const model = genAI.getGenerativeModel({
 });
 
 const TARGET_LOCALES = [
-  'ar',
+  // 'ar',
   'de',
   'es',
   'fr',
-  'he',
-  // 'it',
+  // 'he',
+  'it',
   // 'ja',
   // 'pl',
   // 'pt',
