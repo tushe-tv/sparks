@@ -130,7 +130,7 @@ async function translateBlogPosts() {
               JSON.stringify(finalArticleData, null, 2),
             );
 
-            localeCatalog.push({
+            localeCatalog.unshift({
               slug: finalArticleData.slug,
               title: finalArticleData.title,
               description: finalArticleData.description,
