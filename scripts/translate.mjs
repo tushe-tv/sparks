@@ -27,7 +27,7 @@ const model = genAI.getGenerativeModel({
 
 const TARGET_LOCALES = [
   // 'ar',
-  // 'de',
+  'de',
   // 'es',
   // 'fr',
   // 'he',
