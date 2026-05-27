@@ -6,16 +6,15 @@ import 'dotenv/config';
 // Initialize Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// ✨ NEW: We force Gemini to use Structured Outputs (JSON Schema)
-// This strictly controls how the AI replies so it cannot break the formatting!
+// ✨ FIXED: Renamed 'body' to 'htmlContent' to match our new architecture
 const translationSchema = {
   type: SchemaType.OBJECT,
   properties: {
     title: { type: SchemaType.STRING },
     description: { type: SchemaType.STRING },
-    body: { type: SchemaType.STRING },
+    htmlContent: { type: SchemaType.STRING },
   },
-  required: ['title', 'description', 'body'],
+  required: ['title', 'description', 'htmlContent'],
 };
 
 const model = genAI.getGenerativeModel({
@@ -27,17 +26,17 @@ const model = genAI.getGenerativeModel({
 });
 
 const TARGET_LOCALES = [
-  'ar',
-  'de',
-  'es',
-  'fr',
-  'he',
-  'it',
-  'ja',
-  'pl',
-  'pt',
+  // 'ar',
+  // 'de',
+  // 'es',
+  // 'fr',
+  // 'he',
+  // 'it',
+  // 'ja',
+  // 'pl',
+  // 'pt',
   'ru',
-  'tr',
+  // 'tr',
 ];
 const BLOG_DIR = path.join(process.cwd(), 'blog', 'posts');
 const EN_DIR = path.join(BLOG_DIR, 'en');
@@ -74,21 +73,30 @@ async function translateBlogPosts() {
       if (!isAlreadyTranslated) {
         console.log(`   ⚡ Translating "${enArticle.slug}" into ${locale}...`);
 
-        const enArticlePath = path.join(EN_DIR, `${enArticle.slug}.json`);
+        const enArticleJsonPath = path.join(EN_DIR, `${enArticle.slug}.json`);
+        const enArticleHtmlPath = path.join(EN_DIR, `${enArticle.slug}.html`);
+
         const enArticleData = JSON.parse(
-          fs.readFileSync(enArticlePath, 'utf8'),
+          fs.readFileSync(enArticleJsonPath, 'utf8'),
         );
+
+        let enArticleHtml = '';
+        if (fs.existsSync(enArticleHtmlPath)) {
+          enArticleHtml = fs.readFileSync(enArticleHtmlPath, 'utf8');
+        } else if (enArticleData.body) {
+          // Fallback just in case the English version hasn't been split yet!
+          enArticleHtml = enArticleData.body;
+        }
 
         const targetLanguage =
           locale === 'pt' ? 'pt-BR (Brazilian Portuguese)' : locale;
 
-        // ✨ NEW: We only send the specific text fields that need translating
-        // We do NOT send the whole JSON object anymore!
+        // ✨ FIXED: Updated prompt to reference htmlContent instead of body
         const prompt = `
           You are an expert translator. Translate the following content into: ${targetLanguage}.
           
           CRITICAL RULES:
-          1. The 'body' text contains HTML. You MUST preserve every single HTML tag exactly as it is (e.g., <p>, <h2>). ONLY translate the human-readable text between the tags.
+          1. The 'htmlContent' string contains HTML. You MUST preserve every single HTML tag exactly as it is (e.g., <p>, <h2>, <div class="xyz">). ONLY translate the human-readable text between the tags.
           2. Ensure the output strictly follows the requested JSON schema.
           
           TITLE TO TRANSLATE:
@@ -97,8 +105,8 @@ async function translateBlogPosts() {
           DESCRIPTION TO TRANSLATE:
           ${enArticleData.description}
 
-          BODY HTML TO TRANSLATE:
-          ${enArticleData.body}
+          HTML CONTENT TO TRANSLATE:
+          ${enArticleHtml}
         `;
 
         let success = false;
@@ -110,23 +118,31 @@ async function translateBlogPosts() {
             attempts++;
             const result = await model.generateContent(prompt);
 
-            // This response is now guaranteed to match our schema
             const translatedFields = JSON.parse(result.response.text());
 
-            // ✨ NEW: We safely rebuild the final JSON object ourselves!
+            // ✨ FIXED: Pulling from htmlContent instead of body
+            const translatedHtmlPath = path.join(
+              localeDir,
+              `${enArticle.slug}.html`,
+            );
+            fs.writeFileSync(translatedHtmlPath, translatedFields.htmlContent);
+
             const finalArticleData = {
-              ...enArticleData, // Keep all original untranslated fields (slug, date, img)
-              title: translatedFields.title, // Inject the translated title
-              description: translatedFields.description, // Inject the translated description
-              body: translatedFields.body, // Inject the translated body
+              ...enArticleData,
+              title: translatedFields.title,
+              description: translatedFields.description,
             };
 
-            const translatedArticlePath = path.join(
+            // Just in case the original English JSON still had the old 'body' property hanging around,
+            // we delete it here so it doesn't pollute your clean translated JSON files!
+            delete finalArticleData.body;
+
+            const translatedJsonPath = path.join(
               localeDir,
               `${enArticle.slug}.json`,
             );
             fs.writeFileSync(
-              translatedArticlePath,
+              translatedJsonPath,
               JSON.stringify(finalArticleData, null, 2),
             );
 
