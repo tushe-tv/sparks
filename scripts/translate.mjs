@@ -26,17 +26,17 @@ const model = genAI.getGenerativeModel({
 });
 
 const TARGET_LOCALES = [
-  // 'ar',
+  'ar',
   'de',
-  // 'es',
-  // 'fr',
-  // 'he',
-  // 'it',
-  // 'ja',
-  // 'pl',
-  // 'pt',
+  'es',
+  'fr',
+  'he',
+  'it',
+  'ja',
+  'pl',
+  'pt',
   'ru',
-  // 'tr',
+  'tr',
 ];
 const BLOG_DIR = path.join(process.cwd(), 'blog', 'posts');
 const EN_DIR = path.join(BLOG_DIR, 'en');
