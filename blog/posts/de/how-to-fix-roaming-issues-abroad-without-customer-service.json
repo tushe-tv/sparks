@@ -1,0 +1,56 @@
+{
+  "title": "Roaming-Probleme im Ausland beheben, ohne den Kundenservice zu kontaktieren",
+  "slug": "how-to-fix-roaming-issues-abroad-without-customer-service",
+  "description": "Roaming-Probleme im Ausland? Die komplette Anleitung zur eigenständigen Diagnose und Behebung gängiger mobiler Probleme im Ausland, Schritt für Schritt. Das Telefon verbindet sich nicht mit dem Netz, WhatsApp hängt und die Karte will nicht laden – dies...",
+  "datePublished": "2026-05-20",
+  "dateModified": "2026-05-20",
+  "countries": [
+    "Jordan"
+  ],
+  "img": {
+    "src": "roaming-in-abroad-connection-issues-abroad-causes-aac7.webp",
+    "width": 1024,
+    "height": 1024
+  },
+  "wordCount": 993,
+  "mainEntity": {
+    "@type": "Thing",
+    "name": "How to fix roaming issues abroad without contacting customer service"
+  },
+  "about": [
+    {
+      "@type": "Thing",
+      "name": "Device"
+    },
+    {
+      "@type": "Thing",
+      "name": "Network"
+    },
+    {
+      "@type": "Thing",
+      "name": "Before"
+    },
+    {
+      "@type": "Thing",
+      "name": "Roaming"
+    },
+    {
+      "@type": "Thing",
+      "name": "The roaming"
+    }
+  ],
+  "mentions": [
+    {
+      "@type": "Product",
+      "name": "No Service"
+    },
+    {
+      "@type": "Product",
+      "name": "Manual Network Selection"
+    },
+    {
+      "@type": "Product",
+      "name": "Carrier Lock"
+    }
+  ]
+}
