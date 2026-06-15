@@ -1,0 +1,53 @@
+{
+  "title": "איך מתקנים בעיות רומינג בחול בלי לפנות למוקד שירות",
+  "slug": "how-to-fix-roaming-issues-abroad-without-customer-service",
+  "description": "בעיות רומינג בחול? המדריך המלא לאבחון עצמאי ותיקון תקלות נפוצות בסלולרי בחו\"ל, צעד אחר צעד הטלפון לא מתחבר לרשת, ה-WhatsApp תקוע, והמפה מסרבת להיטען - זה...",
+  "datePublished": "2026-05-20",
+  "dateModified": "2026-05-20",
+  "img": {
+    "src": "roaming-in-abroad-connection-issues-abroad-causes-5f4b.webp",
+    "width": 1024,
+    "height": 1024
+  },
+  "wordCount": 993,
+  "mainEntity": {
+    "@type": "Thing",
+    "name": "איך מתקנים בעיות רומינג בחול בלי לפנות למוקד שירות"
+  },
+  "about": [
+    {
+      "@type": "Thing",
+      "name": "המכשיר"
+    },
+    {
+      "@type": "Thing",
+      "name": "רשת"
+    },
+    {
+      "@type": "Thing",
+      "name": "לפני"
+    },
+    {
+      "@type": "Thing",
+      "name": "רומינג"
+    },
+    {
+      "@type": "Thing",
+      "name": "הרומינג"
+    }
+  ],
+  "mentions": [
+    {
+      "@type": "Product",
+      "name": "No Service"
+    },
+    {
+      "@type": "Product",
+      "name": "Manual Network Selection"
+    },
+    {
+      "@type": "Product",
+      "name": "Carrier Lock"
+    }
+  ]
+}
