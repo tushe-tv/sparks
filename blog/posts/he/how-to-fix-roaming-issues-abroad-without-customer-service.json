@@ -1,7 +1,7 @@
 {
-  "title": "How to fix roaming issues abroad without contacting customer service",
+  "title": "איך מתקנים בעיות רומינג בחול בלי לפנות למוקד שירות",
   "slug": "how-to-fix-roaming-issues-abroad-without-customer-service",
-  "description": "Roaming issues abroad? The complete guide to independent diagnosis and fixing of common mobile problems abroad, step by step. The phone won't connect to the network, WhatsApp is stuck, and the map refuses to load - this...",
+  "description": "בעיות רומינג בחול? המדריך המלא לאבחון עצמאי ותיקון תקלות נפוצות בסלולרי בחו\"ל, צעד אחר צעד הטלפון לא מתחבר לרשת, ה-WhatsApp תקוע, והמפה מסרבת להיטען - זה...",
   "datePublished": "2026-05-20",
   "dateModified": "2026-05-20",
   "countries": ["Jordan"],
@@ -13,28 +13,28 @@
   "wordCount": 993,
   "mainEntity": {
     "@type": "Thing",
-    "name": "How to fix roaming issues abroad without contacting customer service"
+    "name": "איך מתקנים בעיות רומינג בחול בלי לפנות למוקד שירות"
   },
   "about": [
     {
       "@type": "Thing",
-      "name": "Device"
+      "name": "המכשיר"
     },
     {
       "@type": "Thing",
-      "name": "Network"
+      "name": "רשת"
     },
     {
       "@type": "Thing",
-      "name": "Before"
+      "name": "לפני"
     },
     {
       "@type": "Thing",
-      "name": "Roaming"
+      "name": "רומינג"
     },
     {
       "@type": "Thing",
-      "name": "The roaming"
+      "name": "הרומינג"
     }
   ],
   "mentions": [
