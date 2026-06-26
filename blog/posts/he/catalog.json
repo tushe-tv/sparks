@@ -1,5 +1,16 @@
 [
     {
+        "slug": "sim-card-replacement-abroad-guide",
+        "title": "החלפת כרטיסי סים בחו\"ל: כל מה שצריך לדעת לפני היציאה",
+        "description": "כל מה שצריך לדעת על החלפת כרטיסי סים בחו\"ל: SIM מקומי מול eSIM, יתרונות וחסרונות, טיפים לחיסכון בעלויות רואמינג ובחירת החבילה הנכונה כל מטייל שנחת בשדה...",
+        "img": {
+            "src": "switching-sim-cards-local-sim-vs-esim-comparison-cc9e.webp",
+            "width": 1024,
+            "height": 576
+        },
+        "datePublished": "2026-06-26"
+    },
+    {
         "slug": "5g-cellular-coverage-impact-browsing-experience",
         "title": "כיסוי סלולרי 5G וההשפעה שלו על חוויית הגלישה בשטח",
         "description": "כיסוי סלולרי 5G מספק מהירויות גלישה גבוהות בהרבה מ-4G, אך הפריסה שלו עדיין מוגבלת לאזורים מסוימים - כך תבדקו ותבחרו נכון רשת 5G מספקת אינטרנט מהיר ויציב...",
