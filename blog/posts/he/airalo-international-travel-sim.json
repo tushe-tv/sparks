@@ -1,0 +1,23 @@
+{
+    "title": "Airalo",
+    "slug": "airalo-international-travel-sim",
+    "description": "Airalo הוא שירות eSIM המציע חבילות גלישה בחו\"ל ביותר מ-200 יעדים.",
+    "datePublished": "2026-07-07",
+    "dateModified": "2026-07-07",
+    "countries": [
+        "Singapore",
+        "South Korea",
+        "Slovakia",
+        "Slovenia"
+    ],
+    "img": {
+        "src": "airalo-how-to-purchase-and-activate-esim-8f13.webp",
+        "width": 1024,
+        "height": 576
+    },
+    "wordCount": 1078,
+    "mainEntity": {
+        "@type": "Thing",
+        "name": "Airalo"
+    }
+}

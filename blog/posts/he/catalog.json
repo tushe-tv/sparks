@@ -1,5 +1,16 @@
 [
     {
+        "slug": "airalo-international-travel-sim",
+        "title": "Airalo",
+        "description": "Airalo הוא שירות eSIM המציע חבילות גלישה בחו\"ל ביותר מ-200 יעדים.",
+        "img": {
+            "src": "airalo-how-to-purchase-and-activate-esim-8f13.webp",
+            "width": 1024,
+            "height": 576
+        },
+        "datePublished": "2026-07-07"
+    },
+    {
         "slug": "no-sim-travel-connectivity-without-physical-cards",
         "title": "אי סים למטייל: קישוריות בלי כרטיסים פיזיים",
         "description": "למטייל אי סים הוא הפתרון המודרני לקישוריות בחו\"ל - ללא כרטיס פיזי, עם הפעלה מיידית לפני היציאה לדרך נחיתה בשדה תעופה זר, ניסיון לאתר קיוסק SIM בשפה שאינך...",
